@@ -7,6 +7,7 @@ gaudi_subdir(DataObjects v1r0)
 gaudi_depends_on_subdirs(GaudiAlg)
 
 find_package(HepMC)
+find_package(FastJet)
 
 gaudi_add_library(DataObjects
 		  src/*.cpp

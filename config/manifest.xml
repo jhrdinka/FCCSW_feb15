@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest>
+  <project name="FCCSW" version="HEAD" />
+  <used_projects>
+    <project name="GaudiProject" version="v25r2" />
+  </used_projects>
+</manifest>

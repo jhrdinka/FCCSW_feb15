@@ -1,0 +1,9 @@
+ModuleA
+06.01.2015
+-was constructed with TestTracker5.xml
+-one Module (30.4mm x 8.4mm x 0.6mm)
+ with 3 components:
+  - Copper   (30.4mm x 8.4mm x 0.2mm)
+  - Silicon  (15.2mm x 8.4mm x 0.2mm), sensitive
+  - Tungsten (30.4mm x 4.2mm x 0.2mm)
+

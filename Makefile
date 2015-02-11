@@ -108,3 +108,4 @@ $(lastword $(MAKEFILE_LIST)):
 $(BUILDDIR)/Makefile:
 	mkdir -p $(BUILDDIR)
 	cd $(BUILDDIR) && $(CMAKE) $(CMAKEFLAGS) $(CURDIR)
+

@@ -1,0 +1,20 @@
+################################################################################
+# Package: SimFastTools
+################################################################################
+gaudi_subdir(SimFastTools v1r0)
+
+gaudi_depends_on_subdirs(GaudiAlg
+                         GaudiKernel
+			 Simulation/SimulationInterfaces
+			 RecoGeometry)
+
+find_package(ROOT COMPONENTS MathCore GenVector Geom)
+
+find_package(DD4hep)
+
+gaudi_add_library(SimFastTools
+                  src/*.cxx
+                  PUBLIC_HEADERS SimFastTools
+                  INCLUDE_DIRS ROOT GaudiKernel DD4hep SimulationInterfaces RecoGeometry
+                  LINK_LIBRARIES ROOT GaudiKernel DD4hep RecoGeometry) 
+
