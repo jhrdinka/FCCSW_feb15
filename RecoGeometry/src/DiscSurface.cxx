@@ -58,6 +58,16 @@ Reco::Surface(materialmap, transf)
 Reco::DiscSurface::~DiscSurface()
 {}
 
+Reco::DiscSurface& Reco::DiscSurface::operator=(const DiscSurface& discsurface)
+{
+    if (this!=&discsurface) {
+        Reco::Surface::operator=(discsurface);
+        m_Rmin = discsurface.getRmin();
+        m_Rmax = discsurface.getRmax();
+    }
+    return (*this);
+}
+
 double Reco::DiscSurface::getRmin() const
 {
     return (m_Rmin);

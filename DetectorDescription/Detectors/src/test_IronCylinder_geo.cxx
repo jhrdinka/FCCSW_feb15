@@ -34,8 +34,8 @@ static Ref_t create_detector(LCDD& lcdd, xml_h e, SensitiveDetector sens)  {
   Tube tub(inner_r,outer_r,x_det_dim.z()/2.0,0.0,2*M_PI);
   Volume tub_vol(x_det.nameStr()+"_tube",tub,lcdd.material("Iron"));
   calo_vol.placeVolume(tub_vol).addPhysVolID("module",1);
-  sens.setType("calorimeter");
-  tub_vol.setSensitiveDetector(sens);
+//  sens.setType("calorimeter");
+//  tub_vol.setSensitiveDetector(sens);
   d_det.setAttributes(lcdd,tub_vol,x_det.regionStr(),x_det.limitsStr(),x_det.visStr());
 
   // Place the calo inside the world

@@ -37,6 +37,8 @@ namespace Reco {
         
         //destructor
         virtual ~Surface();
+        //assignment operator
+        Surface& operator=(const Surface& surface);
         //get transform matrix
         const Alg::Transform3D& transform() const;
         //get the center of the surface

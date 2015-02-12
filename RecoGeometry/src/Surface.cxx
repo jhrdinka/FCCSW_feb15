@@ -85,6 +85,20 @@ Reco::Surface::~Surface()
     m_materialmap = 0;
 }
 
+Reco::Surface& Reco::Surface::operator=(const Reco::Surface& surface)
+{
+    if (this!=&surface){
+        delete m_center; m_center = 0;
+        delete m_normal; m_normal = 0;
+        delete m_node;   m_node = 0;
+        delete m_materialmap;
+        
+        m_transform.reset(surface.m_transform.get());
+        m_materialmap = surface.m_materialmap;
+    }
+    return (*this);
+}
+
 const Alg::Transform3D& Reco::Surface::transform() const
 {
     if(m_transform) return (*m_transform);

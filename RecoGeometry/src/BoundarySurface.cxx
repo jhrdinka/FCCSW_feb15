@@ -34,6 +34,19 @@ Reco::BoundarySurface::~BoundarySurface()
     delete m_nextVolumes;
 }
 
+Reco::BoundarySurface& Reco::BoundarySurface::operator=(const BoundarySurface& boundarysurface)
+{
+    if(this!=&boundarysurface)
+    {
+        m_nextVolume     = boundarysurface.m_nextVolume;
+        m_previousVolume = boundarysurface.m_previousVolume;
+        delete m_nextVolumes;    m_nextVolumes = 0;
+        delete m_previousVolumes; m_previousVolumes = 0;
+    }
+    return (*this);
+    
+}
+
 void Reco::BoundarySurface::setNextVolume(std::shared_ptr<const Reco::Volume> nextVolume) const
 {
     m_nextVolume = nextVolume;

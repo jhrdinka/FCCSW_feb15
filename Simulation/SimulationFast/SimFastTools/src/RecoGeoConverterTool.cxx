@@ -128,8 +128,8 @@ StatusCode RecoGeoConverterTool::translateDetector(DD4hep::Geometry::DetElement 
         
        if (itkeys.first==0) {
             std::cout << "itkeys==0" << std::endl;
-            Alg::Point3D center = currentvol.at(Reco::Volume::barrel)->center();
-            binRvector->at(0)  = (make_pair(currentvol.at(Reco::Volume::barrel),center));
+ //           Alg::Point3D center = currentvol.at(Reco::Volume::barrel)->center();
+//            binRvector->at(0)  = (make_pair(currentvol.at(Reco::Volume::barrel),center));
             previousvol = currentvol;
         }
         
@@ -190,6 +190,9 @@ StatusCode RecoGeoConverterTool::translateDetector(DD4hep::Geometry::DetElement 
             std::cout << "Test6" << std::endl;
             std::cout << "containervolume" << std::endl;
             m_out << "created containervolume" << std::endl;
+            //beampipe
+            contvol->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->setPreviousVolume(previousvol.at(Reco::Volume::barrel));
+            //rest
             contvol->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->setNextVolumes(new Trk::BinnedArray1D<Reco::Volume>(*binnedvolumes));
             contvol->getBoundarySurface(Reco::CylinderVolume::outerCylinder)->setPreviousVolumes(new Trk::BinnedArray1D<Reco::Volume>(*binnedvolumes));
             contvol->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolume(currentvol.at(Reco::Volume::nEndCap));
@@ -235,7 +238,7 @@ StatusCode RecoGeoConverterTool::translateDetector(DD4hep::Geometry::DetElement 
              //make binned Array
             //binutility
             std::cout << "2Test4" << std::endl;
-            bRValues.at(Reco::ContainerCylinderVolume::inner) = previousvol.at(Reco::Volume::container)->getCoordinate(Reco::CylinderVolume::Rmin);
+            bRValues.at(Reco::ContainerCylinderVolume::inner) = 0.; //previousvol.at(Reco::Volume::container)->getCoordinate(Reco::CylinderVolume::Rmin);
             bRValues.at(Reco::ContainerCylinderVolume::middle) = previousvol.at(Reco::Volume::container)->getCoordinate(Reco::CylinderVolume::Rmax);
             bRValues.at(Reco::ContainerCylinderVolume::outer) = currentvol.at(Reco::Volume::barrel)->getCoordinate(Reco::CylinderVolume::Rmax);
             std::cout << "2Test5" << std::endl;
@@ -245,20 +248,23 @@ StatusCode RecoGeoConverterTool::translateDetector(DD4hep::Geometry::DetElement 
             std::cout << "2Test6" << std::endl;
             center1 = currentvol.at(Reco::Volume::barrel)->center();
             binRvector->at(1)  = (make_pair(currentvol.at(Reco::Volume::barrel),center1));
-            
+            std::cout << "2Test6.1" << center1 << std::endl;
             //negativ
             center1 = previousvol.at(Reco::Volume::nEndCap)->center();
             binRvector->at(0) = (make_pair(previousvol.at(Reco::Volume::nEndCap),center1));
-            
+            std::cout << "2Test6.2" << center1 << std::endl;
             Trk::BinnedArray1D<Reco::Volume>* binnedRvolumes1 = new Trk::BinnedArray1D<Reco::Volume>(*binRvector,binutil);
-            currentvol.at(Reco::Volume::nEndCap)->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolumes(binnedRvolumes1);
+            if (!currentvol.at(Reco::Volume::nEndCap)) {
+                std::cout << "not" << std::endl;
+            }
+            //->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolumes(binnedRvolumes1);
             //positiv
             std::cout << "2Test7" << std::endl;
             center1 = previousvol.at(Reco::Volume::pEndCap)->center();
             binRvector->at(0) = (make_pair(previousvol.at(Reco::Volume::pEndCap),center1));
             std::cout << "2Test8" << std::endl;
             Trk::BinnedArray1D<Reco::Volume>* binnedRvolumes2 = new Trk::BinnedArray1D<Reco::Volume>(*binRvector,binutil);
-            currentvol.at(Reco::Volume::pEndCap)->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolumes(binnedRvolumes2);
+            currentvol.at(Reco::Volume::pEndCap)->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolumes(new Trk::BinnedArray1D<Reco::Volume>(*binnedRvolumes2));
             std::cout << "2Test9" << std::endl;
         //make ContainerVolume1 //momentan wird containervolume an containervolume 1 uebergeben und nicht schon aufgeloest in untervolumen -gut? ABER FUER NEext und previousvolumes is schon aufegloest, also passt
             center1 = previousvol.at(Reco::Volume::container)->center();
@@ -277,8 +283,11 @@ StatusCode RecoGeoConverterTool::translateDetector(DD4hep::Geometry::DetElement 
             //set surfacepointers of ContainerVolume1
             contvol1->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->setNextVolumes(previousvol.at(Reco::Volume::container)->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->getNextVolumes());
             contvol1->getBoundarySurface(Reco::CylinderVolume::outerCylinder)->setPreviousVolume(currentvol.at(Reco::Volume::barrel));
-            contvol1->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolumes(binnedRvolumes1);
-            contvol1->getBoundarySurface(Reco::CylinderVolume::posDisc)->setPreviousVolumes(binnedRvolumes2);
+            contvol1->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolumes(new Trk::BinnedArray1D<Reco::Volume>(*binnedRvolumes1));
+            contvol1->getBoundarySurface(Reco::CylinderVolume::posDisc)->setPreviousVolumes(new Trk::BinnedArray1D<Reco::Volume>(*binnedRvolumes2));
+            //beamtube
+      //      contvol1->getBoundarySurface(Reco::CylinderVolume::innerCylinder) =
+
             std::cout << "2Test11" << std::endl;
             //make ContainerVolume2
             //fill bZValues
@@ -312,8 +321,9 @@ StatusCode RecoGeoConverterTool::translateDetector(DD4hep::Geometry::DetElement 
             Trk::BinnedArray1D<Reco::Volume>* containerbin3 = new Trk::BinnedArray1D<Reco::Volume>(*binZvector,binZutil);
             //set surfacepointers of ContainerVolume2
             std::cout << "2Test15" << std::endl;
-            contvol2->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->setNextVolumes(previousvol.at(Reco::Volume::container)->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->getNextVolumes());
-            contvol2->getBoundarySurface(Reco::CylinderVolume::outerCylinder)->setPreviousVolumes(containerbin3);
+            const Trk::BinnedArray1D<Reco::Volume>* containerbin4 = previousvol.at(Reco::Volume::container)->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->getNextVolumes();
+            contvol2->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->setNextVolumes(new Trk::BinnedArray1D<Reco::Volume>(*containerbin4));
+            contvol2->getBoundarySurface(Reco::CylinderVolume::outerCylinder)->setPreviousVolumes(new Trk::BinnedArray1D<Reco::Volume>(*containerbin3));
             contvol2->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolume(currentvol.at(Reco::Volume::nEndCap));
             contvol2->getBoundarySurface(Reco::CylinderVolume::posDisc)->setPreviousVolume(currentvol.at(Reco::Volume::pEndCap));
 
@@ -403,6 +413,22 @@ StatusCode RecoGeoConverterTool::translateVolume(DD4hep::Geometry::DetElement de
                             else return StatusCode::FAILURE;
                         }
                     }//if !layer.empty()
+                    else {
+                        std::shared_ptr<const Reco::Volume> cylindervolume(new Reco::CylinderVolume(geonode, tube));
+                                if (cylindervolume) {
+                                    std::cout  << "##### created cylindervolume" << std::endl;
+                                    cylindervolume->getBoundarySurface(Reco::CylinderVolume::posDisc)->setPreviousVolume(cylindervolume);
+                                    cylindervolume->getBoundarySurface(Reco::CylinderVolume::negDisc)->setPreviousVolume(cylindervolume);
+                                    cylindervolume->getBoundarySurface(Reco::CylinderVolume::outerCylinder)->setPreviousVolume(cylindervolume);
+                                    if (cylindervolume->NumberOfSurfaces()==4) {
+                                        cylindervolume->getBoundarySurface(Reco::CylinderVolume::innerCylinder)->setNextVolume(cylindervolume);
+                                    }
+                                    cylindervolume->setType(Reco::Volume::barrel);
+                                    std::cout << "status" << status << std::endl;
+                                    volumes.emplace(status,cylindervolume);
+                                } //if cylindervolume
+                            else return StatusCode::FAILURE;
+                    } // layer.empty()
                 }//if tube
             }//if geoshape
         } //if geonode

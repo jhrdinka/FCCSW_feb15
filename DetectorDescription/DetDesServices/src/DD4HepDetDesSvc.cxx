@@ -23,7 +23,7 @@ DD4HepDetDesSvc::DD4HepDetDesSvc(const std::string& name, ISvcLocator* svc)
   m_recoConverter(),
   m_g4Converter(),
   m_lcdd(0),
-  m_xmlFileName("file:DetectorDescription/Detectors/compact/TestTracker3.xml"),
+  m_xmlFileName("file:DetectorDescription/Detectors/compact/test_IronCylinder.xml"),
   m_log(msgSvc(), name)
 {
  //   declareProperty("DD4HepXMLFile", m_xmlFileName);
@@ -100,7 +100,7 @@ DD4HepDetDesSvc::buildDetector () {
    // for (auto& geoConv : m_geoConverters)
    //     geoConv->convert(m_lcdd);
     
-//    m_recoConverter->convert(m_lcdd);
+ //   m_recoConverter->convert(m_lcdd);
     m_g4Converter->convert(m_lcdd);
     m_log << MSG::INFO << "AFTER CONVERT" << endmsg;
     

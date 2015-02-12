@@ -66,6 +66,16 @@ Reco::Surface(materialmap, transf)
 Reco::CylinderSurface::~CylinderSurface()
 {}
 
+Reco::CylinderSurface& Reco::CylinderSurface::operator=(const CylinderSurface& cylindersurface)
+{
+    if (this!=&cylindersurface) {
+        Reco::Surface::operator=(cylindersurface);
+        m_R = cylindersurface.m_R;
+        m_halfZ = cylindersurface.m_halfZ;
+    }
+    return (*this);
+}
+
 double Reco::CylinderSurface::getR() const
 {
     return (m_R);

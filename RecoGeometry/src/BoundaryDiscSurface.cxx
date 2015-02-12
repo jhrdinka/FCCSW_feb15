@@ -35,6 +35,15 @@ DiscSurface(transf,Rmin,Rmax)
 Reco::BoundaryDiscSurface::~BoundaryDiscSurface()
 {}
 
+Reco::BoundaryDiscSurface& Reco::BoundaryDiscSurface::operator=(const BoundaryDiscSurface& boundarydiscsurface)
+{
+    if (this!=&boundarydiscsurface) {
+        Reco::BoundarySurface::operator=(boundarydiscsurface);
+        Reco::Surface::operator=(boundarydiscsurface);
+    }
+    return (*this);
+}
+
 //const Volume* Reco::BoundaryDiscSurface::getNextVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const
 //{
     

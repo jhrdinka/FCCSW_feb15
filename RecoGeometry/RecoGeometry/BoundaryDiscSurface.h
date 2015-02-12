@@ -25,6 +25,8 @@ namespace Reco {
    //     BoundaryDiscSurface(VolumeArray* nextVolumes, VolumeArray* previousVolumes);
         ~BoundaryDiscSurface();
         
+        BoundaryDiscSurface& operator=(const BoundaryDiscSurface& boundarydiscsurface);
+        
 //        virtual void setNextVolume(Volume* nextVolume) const override;
 //        virtual void setPreviousVolume(Volume* previousVolume) const override;
 //        virtual void setNextVolumes(VolumeArray* nextVolumes) const override;

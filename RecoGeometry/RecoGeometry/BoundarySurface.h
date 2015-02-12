@@ -9,7 +9,7 @@
 #ifndef RECO_BOUNDARYSURFACE_H
 #define RECO_BOUNDARYSURFACE_H
 
-#include "TrkGeometryUtils/BinnedArray.h"
+#include "TrkGeometryUtils/BinnedArray1D.h"
 
 namespace Reco {
 
@@ -20,11 +20,12 @@ namespace Reco {
         
     public:
     
-        typedef Trk::BinnedArray<Volume> VolumeArray;
+        typedef Trk::BinnedArray1D<Volume> VolumeArray;
         
   //      BoundarySurface(Volume* nextVolume, Volume* previousVolume);
  //       BoundarySurface(VolumeArray* nextVolumes, VolumeArray* previousVolumes);
         virtual ~BoundarySurface();
+        BoundarySurface& operator=(const BoundarySurface& boundarysurface);
         
         virtual void setNextVolume(std::shared_ptr<const Volume> nextVolume) const;
         virtual void setPreviousVolume(std::shared_ptr<const Volume> previousVolume) const;
@@ -34,6 +35,7 @@ namespace Reco {
         virtual const Volume* getPreviousVolume() const;
         virtual const VolumeArray* getNextVolumes() const;
         virtual const VolumeArray* getPreviousVolumes() const;
+        
   //      virtual const Volume* getNextVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const = 0;
   //      virtual const Volume* getPreviousVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const = 0;
         virtual const Surface* surfaceRepresentation() const = 0;

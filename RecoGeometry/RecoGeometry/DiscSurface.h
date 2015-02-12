@@ -31,6 +31,8 @@ namespace Reco {
         //cnstructor with rmin and rmax
         virtual ~DiscSurface();
         
+        DiscSurface& operator=(const DiscSurface& discsurface);
+        
         double getRmin() const;
         double getRmax() const;
         

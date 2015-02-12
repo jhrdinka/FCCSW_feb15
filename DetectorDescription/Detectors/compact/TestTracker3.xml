@@ -33,6 +33,10 @@
         <constant name="radius2" value="122.5*mm"/>
         <constant name="radius21" value="122.8*mm"/> -->
  
+        <constant name="Tube_rmin" value="0.*mm"/>
+        <constant name="Tube_rmax" value="40.*mm"/>
+        <constant name="Tube_length" value="700.*mm"/>
+ 
         <constant name="Tracker_rmin1" value="40.*mm"/>
         <constant name="Tracker_rmax1" value="133.*mm"/>
         <constant name="Barrel_length1" value="390.5*mm"/>
@@ -72,7 +76,7 @@
         
         <constant name="positionz2_1" value="-480.5*mm"/>
         <constant name="positionz2_2" value="480.5*mm"/>
-        <constant name="EndCapRmin2" value="142.1*mm"/>
+        <constant name="EndCapRmin2" value="42.1*mm"/>
         <constant name="EndCapRmax2" value="202.9*mm"/>
         <constant name="pixelcounter2_3" value="60"/>
         <constant name="slice1radius2" value="172.5*mm"/>
@@ -135,6 +139,11 @@
     </readouts>
     
     <detectors>
+        <!--BeamTube-->
+        <detector id="0" name="BeamTube" type="BeamTube">
+            <status id="0"/>
+            <dimensions rmin="Tube_rmin" rmax="Tube_rmax" z="Tube_length" vis="comp1"/>
+        </detector>
         <!--Barrel1-->
         <detector id="1" name="Tracker0" type="TestTracker3" readout="TrackerReadout">
             <status id="1"/>
@@ -282,7 +291,7 @@
         <!--nEndCap2-->
         <detector id="5" name="EndCap2_1" type="EndCap" readout="TrackerReadout">
             <status id="2"/>
-            <dimensions rmin="Tracker_rmin2" rmax = "Tracker_rmax2" dz="EndCapZ" z ="positionz2_1"/>
+            <dimensions rmin="Tracker_rmin1" rmax = "Tracker_rmax2" dz="EndCapZ" z ="positionz2_1"/>
             <layer id="0" inner_r="EndCapRmin2" outer_r="EndCapRmax2" dz="LayerDZ" z="layerpos1" repeat="pixelcounter2_3">
                 <module name ="Box0" radius="slice1radius2" dz="slice1positionz1" width="box_width" length="box_length" thickness="0.6*mm">
                     <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp0"/>
@@ -294,6 +303,18 @@
                     <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp4"/>
                     <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp5"/>
                 </module>
+                
+  <!--              <module name ="Box0" radius="slice1radius1" dz="slice1positionz1" width="box_width" length="box_length" thickness="0.6*mm">
+                    <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp0"/>
+                    <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp1"/>
+                    <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp2"/>
+                </module>
+                <module name ="Box1" radius="slice2radius1" dz="slice2positionz1" width="box2_width" length="box_length" thickness="0.6*mm">
+                    <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp3"/>
+                    <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp4"/>
+                    <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp5"/>
+                </module>
+   -->
             </layer>
             <layer id="1" inner_r="EndCapRmin2" outer_r="EndCapRmax2" dz="LayerDZ" z="layerpos2" repeat="pixelcounter2_3">
                 <module name ="Box0" radius="slice1radius2" dz="slice1positionz1" width="box_width" length="box_length" thickness="0.6*mm">
@@ -323,7 +344,7 @@
         <!--pEndCap2-->
         <detector id="6" name="EndCap2_2" type="EndCap" readout="TrackerReadout">
             <status id="2"/>
-            <dimensions rmin="Tracker_rmin2" rmax = "Tracker_rmax2" dz="EndCapZ" z ="positionz2_2"/>
+            <dimensions rmin="Tracker_rmin1" rmax = "Tracker_rmax2" dz="EndCapZ" z ="positionz2_2"/>
             <layer id="0" inner_r="EndCapRmin2" outer_r="EndCapRmax2" dz="LayerDZ" z="layerpos3" repeat="pixelcounter2_3">
                 <module name ="Box0" radius="slice1radius2" dz="slice1positionz1" width="box_width" length="box_length" thickness="0.6*mm">
                     <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp0"/>

@@ -10,10 +10,15 @@
 //#include "DDG4/Geant4Config.h"
 #include "DDG4/Geant4Kernel.h"
 #include "DDG4/Geant4DetectorConstruction.h"
-
 #include "G4RunManager.hh"
-
 #include "DD4hep/Printout.h"
+
+//Geant4 additional
+#include "FTFP_BERT.hh"
+#include "SimG4Tools/B1PrimaryGeneratorAction.h"
+#include "G4GDMLParser.hh"
+#include "G4TransportationManager.hh"
+#include "G4LogicalVolumeStore.hh"
 
 DECLARE_COMPONENT(Geant4GeoConverterTool)
 
@@ -36,6 +41,17 @@ StatusCode Geant4GeoConverterTool::convert(DD4hep::Geometry::LCDD* lcdd){
     G4VUserDetectorConstruction* detector = new DD4hep::Simulation::Geant4DetectorConstruction(*lcdd);
     G4RunManager * runManager = new G4RunManager;
     runManager->SetUserInitialization(detector); //constructs detector (calls Construct in Geant4DetectorConstruction)
+    
+    runManager->SetUserInitialization(new FTFP_BERT);
+    
+    runManager->Initialize();
+    runManager->SetUserAction(new B1PrimaryGeneratorAction);
+    std::cout << "Test1" << std::endl;
+ /*   G4GDMLParser parser;
+    parser.Write("Geant4Detector.gdml", G4TransportationManager::GetTransportationManager()
+                     ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+    std::cout << "Test2" << std::endl;
+*/
  
     return StatusCode::SUCCESS;
 }

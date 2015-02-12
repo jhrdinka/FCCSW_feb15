@@ -25,6 +25,15 @@ CylinderSurface(transf,radius,halfZ)
 
 Reco::BoundaryCylinderSurface::~BoundaryCylinderSurface()
 {}
+
+Reco::BoundaryCylinderSurface& Reco::BoundaryCylinderSurface::operator=(const BoundaryCylinderSurface& boundarycylindersurface)
+{
+    if (this!=&boundarycylindersurface) {
+        Reco::BoundarySurface::operator=(boundarycylindersurface);
+        Reco::Surface::operator=(boundarycylindersurface);
+    }
+    return (*this);
+}
 /*
 void Reco::BoundaryCylinderSurface::setNextVolume(Volume* nextVolume) const
 {

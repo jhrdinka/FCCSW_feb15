@@ -51,12 +51,22 @@ Reco::Surface (materialmap, transf)
 Reco::PlaneSurface::~PlaneSurface()
 {}
 
-double Reco::PlaneSurface::halflengthX() const
+Reco::PlaneSurface& Reco::PlaneSurface::operator=(const PlaneSurface& planesurface)
+{
+    if (this!=&planesurface) {
+        Reco::Surface::operator=(planesurface);
+        m_halfX = planesurface.getHalfX();
+        m_halfY = planesurface.getHalfY();
+    }
+    return (*this);
+}
+
+double Reco::PlaneSurface::getHalfX() const
 {
     return (m_halfX);
 }
 
-double Reco::PlaneSurface::halflengthY() const
+double Reco::PlaneSurface::getHalfY() const
 {
     return (m_halfY);
 }

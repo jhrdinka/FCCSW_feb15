@@ -27,8 +27,10 @@ namespace Reco {
         PlaneSurface(std::shared_ptr<const Alg::Transform3D> transf, double halfX, double halfY);
         virtual ~PlaneSurface();
         
-        double halflengthX() const;
-        double halflengthY() const;
+        PlaneSurface& operator=(const PlaneSurface& planesurface);
+        
+        double getHalfX() const;
+        double getHalfY() const;
         
         //get the normal vector of the surface
         virtual const Alg::Vector3D& normal() const override;

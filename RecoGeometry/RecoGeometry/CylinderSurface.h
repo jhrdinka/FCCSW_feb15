@@ -32,6 +32,8 @@ namespace Reco {
         //cnstructor with rmin and rmax
         virtual ~CylinderSurface();
         
+        CylinderSurface& operator=(const CylinderSurface& cylindersurface);
+        
         double getR() const;
         double getHalfZ() const;
         

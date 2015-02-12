@@ -23,6 +23,8 @@ namespace Reco {
         BoundaryCylinderSurface(std::shared_ptr<const Alg::Transform3D> transf, double radius, double halfZ);
         ~BoundaryCylinderSurface();
         
+        BoundaryCylinderSurface& operator=(const BoundaryCylinderSurface& boundarycylindersurface);
+        
  //       virtual void setNextVolume(Volume* nextVolume) const override;
  //       virtual void setPreviousVolume(Volume* previousVolume) const override;
  //       virtual void setNextVolumes(VolumeArray* nextVolumes) const override;
