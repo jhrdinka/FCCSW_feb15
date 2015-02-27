@@ -28,8 +28,11 @@ namespace Reco {
         CylinderSurface(TGeoConeSeg* tube, MaterialMap* materialmap, std::shared_ptr<const Alg::Transform3D> transf);
         //constructor with transform matrix and dimensions of the cylinder
         CylinderSurface(std::shared_ptr<const Alg::Transform3D> transf, double radius, double halfZ);
+        //constructor with rmin and rmax
         CylinderSurface(double radius, double halfZ);
-        //cnstructor with rmin and rmax
+        //copy constructor
+        CylinderSurface(const CylinderSurface& cylindersurface);
+        
         virtual ~CylinderSurface();
         
         CylinderSurface& operator=(const CylinderSurface& cylindersurface);
@@ -39,11 +42,15 @@ namespace Reco {
         
         //get the normal vector of the surface
         virtual const Alg::Vector3D& normal() const override;
+        // normal vector to local position
         virtual const Alg::Vector3D* normal(const Alg::Point2D& locpos) const override;
-        
+        //get Material on a local position of the surface
+        virtual const Material* material(Alg::Point2D& locpos) const override;
+        //checks if local position locpos is inside the bounds of the surface
         virtual bool isInside(const Alg::Point2D& locpos, double tol1, double tol2) const override;
-        
+        //checks if local position locpos is Inside bounds, with the two tolerances
         virtual void localToGlobal(const Alg::Point2D& locpos, const Alg::Vector3D& mom, Alg::Point3D& glopos) const override;
+        //converts local position in global position
         virtual bool globalToLocal(const Alg::Point3D& glopos, const Alg::Vector3D& mom, Alg::Point2D& locpos) const override;
         
         

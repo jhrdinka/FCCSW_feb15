@@ -67,13 +67,3 @@ const Reco::Layer* Reco::Layer::getPreviousLayer(const Alg::Vector3D&) const
 {
     return getPreviousLayer();
 }
-
-const Reco::Surface* Reco::Layer::getModule(const Alg::Point3D&) const
-{
-    return 0;
-}
-
-const Reco::Surface* Reco::Layer::getModule(const Alg::Point2D&) const
-{
-    return 0;
-}

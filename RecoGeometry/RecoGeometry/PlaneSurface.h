@@ -20,26 +20,37 @@ namespace Reco {
     
     public:
         
+        //constructors from TGeoGeometry for the conversion of the DD4Hep Geometry in the RecoGeoConverterTool
+        //constructor with TGeoNode - transform is set automatically
         PlaneSurface(TGeoNode* node, TGeoBBox* box);
+        //constructor to set transform manually
         PlaneSurface(TGeoBBox* box, std::shared_ptr<const Alg::Transform3D> transf);
+        //constructor with materialmap
         PlaneSurface(TGeoNode* node, TGeoBBox* box, MaterialMap* materialmap);
         PlaneSurface(TGeoBBox* box, MaterialMap* materialmap, std::shared_ptr<const Alg::Transform3D> transf);
+        //manuel constructor, to set transform and dimensions manuel
         PlaneSurface(std::shared_ptr<const Alg::Transform3D> transf, double halfX, double halfY);
+        //copy constructor
+        PlaneSurface(const PlaneSurface& planesurface);
+        //destructor
         virtual ~PlaneSurface();
-        
+        //assignment operator
         PlaneSurface& operator=(const PlaneSurface& planesurface);
-        
+        //get dimensions
         double getHalfX() const;
         double getHalfY() const;
         
         //get the normal vector of the surface
         virtual const Alg::Vector3D& normal() const override;
+        //normal vector to local position
         virtual const Alg::Vector3D* normal(const Alg::Point2D& locpos) const override;
-        
-        
+        //get Material on a local position of the surface
+        virtual const Material* material(Alg::Point2D& locpos) const override;
+        //checks if local position locpos is Inside bounds, with the two tolerances
         virtual bool isInside(const Alg::Point2D& locpos, double tol1, double tol2) const override;
-        
+        //converts local position in global position
         virtual void localToGlobal(const Alg::Point2D& locpos, const Alg::Vector3D& mom, Alg::Point3D& glopos) const override;
+        //converts global position in local position and checks whether the result is on the surface or not
         virtual bool globalToLocal(const Alg::Point3D& glopos, const Alg::Vector3D& mom, Alg::Point2D& locpos) const override;
         
         /** Use the Surface as a ParametersBase constructor, from local parameters - charged */
