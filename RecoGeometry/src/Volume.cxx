@@ -83,6 +83,18 @@ m_coordinates(3,0.)
 
 }
 
+Reco::Volume::Volume(const Reco::Volume& volume) :
+m_center(0),
+m_transform(0),
+m_layers(0),
+m_boundarySurfaces(volume.m_boundarySurfaces),
+m_volumeType(volume.m_volumeType),
+m_coordinates(volume.m_coordinates)
+{
+    m_transform = std::make_shared<const Alg::Transform3D>(volume.transform());
+    m_layers = volume.m_layers;
+}
+
 Reco::Volume::~Volume()
 {
     delete m_center;
@@ -104,24 +116,29 @@ const Alg::Transform3D& Reco::Volume::transform() const
     return (s_idTransform);
 }
 
-//const LayerArray& Reco::Volume::layers() const
-//{
-//    return m_layers;
-//}
-
-/*Reco::Volume::SurfaceVector& Reco::Volume::boundarySurfaces()
-{
-    return (m_boundarySurfaces);
-}*/
-
 int Reco::Volume::NumberOfSurfaces() const
 {
     return (m_boundarySurfaces.size());
 }
 
-const Reco::BoundarySurface* Reco::Volume::getBoundarySurface(int n) const
+const Reco::BoundarySurface* Reco::Volume::getBoundarySurface(size_t n) const
 {
     return (m_boundarySurfaces.at(n).get());
+}
+
+const Reco::BoundarySurface& Reco::Volume::boundarySurface(size_t n) const
+{
+    return (*m_boundarySurfaces.at(n));
+}
+
+bool Reco::Volume::setBoundarySurface(size_t n,std::shared_ptr<const BoundarySurface> boundarysurface) const
+{
+    if (n<m_boundarySurfaces.size()) {
+   //     m_boundarySurfaces.at(n).reset(boundarysurface);
+        m_boundarySurfaces[n] = boundarysurface;
+        return true;
+    }
+    else return false;
 }
 
 void Reco::Volume::setType(Reco::Volume::VolumeType volumeType) const
@@ -134,7 +151,7 @@ Reco::Volume::VolumeType Reco::Volume::type() const
     return m_volumeType;
 }
 
-double Reco::Volume::getCoordinate(int n) const
+double Reco::Volume::getCoordinate(size_t n) const
 {
     return (m_coordinates.at(n));
 }
@@ -143,12 +160,10 @@ std::vector<const Reco::Layer*> Reco::Volume::materialLayersOrdered(const Alg::P
 {   std::vector<const Reco::Layer*> result;
     std::vector<const Reco::Layer*> fulllayers(m_layers->arrayObjects());
     if (isInside(glopos)) {
-        std::cout << "###INSIDE###" << std::endl;
         const Trk::BinUtility* binutil = m_layers->binUtility();
         Alg::Point3D newpos = glopos;
         if (binutil->orderDirection(glopos,mom)==1)
         {
-            std::cout << "orderdirection ==1 " << std::endl;
             int counter = 0;
             for(auto it = (fulllayers.cbegin()+binutil->bin(glopos)); it!=fulllayers.cend();++it)
             {
@@ -180,11 +195,8 @@ std::vector<const Reco::Layer*> Reco::Volume::materialLayersOrdered(const Alg::P
                 ++counter;
             } //for
         } //pos direction
-        //noch einbaun wenn normal drauf steht!!!
         else {
             std::reverse(fulllayers.begin(),fulllayers.end());
-            
-            std::cout << "orderdirection ==-1 " << std::endl;
             int counter = 0;
             int k = fulllayers.size() - (binutil->bin(glopos)+1);
     //        Alg::Point2D locpos;
@@ -229,7 +241,6 @@ std::vector<const Reco::Layer*> Reco::Volume::materialLayersOrdered(const Alg::P
         }
     
     } //isInside volume
-    else std::cout << "###OUTSIDE###" << std::endl;
        return (result);
 }
 

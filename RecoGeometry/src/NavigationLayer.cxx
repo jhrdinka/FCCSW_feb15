@@ -22,6 +22,16 @@ Reco::Layer()
 Reco::NavigationLayer::~NavigationLayer()
 {}
 
+const Reco::Surface* Reco::NavigationLayer::getModule(const Alg::Point3D&) const
+{
+    return (0);
+}
+
+const Reco::Surface* Reco::NavigationLayer::getModule(const Alg::Point2D&) const
+{
+    return (0);
+}
+
 void Reco::NavigationLayer::setNextLayer(std::shared_ptr<const Layer> layer) const
 {
     Reco::Layer::setNextLayer(layer);

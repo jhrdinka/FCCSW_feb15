@@ -30,9 +30,8 @@ m_halfZ(halfZ)
 Reco::CylinderSurface::CylinderSurface(TGeoNode* node, TGeoConeSeg* tube) :
 Reco::Surface(node)
 {
+    //myconeseg in DD4Hep is only defined with Rmax1 and Rmin1
     m_R = 0.5*(tube->GetRmax1()+tube->GetRmin1());
-    //now is cone -> average from rmin1, rmin2, rmax1, rmax2??? brauch ich ned, weil myconeseg nur mit einem radius def is
-    //maybe if (rmax1==rmax2...)
     m_halfZ = tube->GetDz();
 }
 
@@ -40,8 +39,6 @@ Reco::CylinderSurface::CylinderSurface(TGeoConeSeg* tube, std::shared_ptr<const 
 Reco::Surface(transf)
 {
     m_R = 0.5*(tube->GetRmax1()+tube->GetRmin1());
-    //now is cone -> average from rmin1, rmin2, rmax1, rmax2??? brauch ich ned, weil myconeseg nur mit einem radius def is
-    //maybe if (rmax1==rmax2...)
     m_halfZ = tube->GetDz();
 }
 
@@ -49,8 +46,6 @@ Reco::CylinderSurface::CylinderSurface(TGeoNode* node, TGeoConeSeg* tube, Reco::
 Reco::Surface(node,materialmap)
 {
     m_R = 0.5*(tube->GetRmax1()+tube->GetRmin1());
-    //now is cone -> average from rmin1, rmin2, rmax1, rmax2???
-    //maybe if (rmax1==rmax2...)
     m_halfZ = tube->GetDz();
 }
 
@@ -58,10 +53,14 @@ Reco::CylinderSurface::CylinderSurface(TGeoConeSeg* tube, Reco::MaterialMap* mat
 Reco::Surface(materialmap, transf)
 {
     m_R = 0.5*(tube->GetRmax1()+tube->GetRmin1());
-    //now is cone -> average from rmin1, rmin2, rmax1, rmax2???
-    //maybe if (rmax1==rmax2...)
     m_halfZ = tube->GetDz();
 }
+
+Reco::CylinderSurface::CylinderSurface(const CylinderSurface& cylindersurface) :
+Reco::Surface(cylindersurface),
+m_R(cylindersurface.m_R),
+m_halfZ(cylindersurface.m_halfZ)
+{}
 
 Reco::CylinderSurface::~CylinderSurface()
 {}
@@ -98,6 +97,17 @@ const Alg::Vector3D* Reco::CylinderSurface::normal(const Alg::Point2D& locpos) c
     normal          = transform()*normal;
     
     return (new Alg::Vector3D(normal.Unit()));
+}
+
+const Reco::Material* Reco::CylinderSurface::material(Alg::Point2D& locpos) const
+{
+    if (materialmap()->binutility()) {
+        int binx = materialmap()->binutility()->bin(locpos,0);
+        int biny = materialmap()->binutility()->bin(locpos,1);
+        std::pair<int,int> bins = std::make_pair(binx,biny);
+        return (materialmap()->material(bins));
+    }
+    return 0;
 }
 
 bool Reco::CylinderSurface::isInside(const Alg::Point2D& locpos, double tol1, double tol2) const

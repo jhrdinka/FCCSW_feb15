@@ -48,6 +48,12 @@ Reco::Surface (materialmap, transf)
     m_halfY = box->GetDY();
 }
 
+Reco::PlaneSurface::PlaneSurface(const PlaneSurface& planesurface) :
+Reco::Surface(planesurface),
+m_halfX(planesurface.m_halfX),
+m_halfY(planesurface.m_halfY)
+{}
+
 Reco::PlaneSurface::~PlaneSurface()
 {}
 
@@ -81,6 +87,17 @@ const Alg::Vector3D* Reco::PlaneSurface::normal(const Alg::Point2D&) const
     return (new Alg::Vector3D(normal()));
 }
 
+const Reco::Material* Reco::PlaneSurface::material(Alg::Point2D& locpos) const
+{
+    if (materialmap()->binutility()) {
+        int binx = materialmap()->binutility()->bin(locpos,0);
+        int biny = materialmap()->binutility()->bin(locpos,1);
+        std::pair<int,int> bins = std::make_pair(binx,biny);
+        return (materialmap()->material(bins));
+    }
+    return 0;
+}
+
 bool Reco::PlaneSurface::isInside(const Alg::Point2D& locpos, double tol1, double tol2) const
 {
     return ((fabs(locpos.X()) < (m_halfX + tol1)) && (fabs(locpos.Y()) < (m_halfY + tol2)));
@@ -89,7 +106,7 @@ bool Reco::PlaneSurface::isInside(const Alg::Point2D& locpos, double tol1, doubl
 void Reco::PlaneSurface::localToGlobal(const Alg::Point2D& locpos, const Alg::Vector3D&, Alg::Point3D& glopos) const
 {
     Alg::Point3D loc3D (locpos.X(),locpos.Y(),0.);
-    glopos = (transform())*loc3D;
+    glopos = (transform()*loc3D);
 }
 
 bool Reco::PlaneSurface::globalToLocal(const Alg::Point3D& glopos, const Alg::Vector3D&, Alg::Point2D& locpos) const

@@ -21,11 +21,24 @@ namespace Reco {
         
         typedef Trk::BinnedArray<Volume> VolumeArray;
         
+        //standard constructor with a BinnedArray of the containing volumes
         ContainerVolume(VolumeArray* volumes);
+        //checks if global position glopos is inside bounds
         virtual bool isInside(const Alg::Point3D& glopos, double tol=0.) const = 0;
+        //copyconstructor
+        ContainerVolume(const ContainerVolume& containervolume);
+        //destructor
         virtual ~ContainerVolume();
+        //clone Method
+        virtual ContainerVolume* clone() const = 0;
+        //set the boundarysurface at n - for definition of n see specific volumes (such as CylinderVolume)
+        virtual bool setBoundarySurface(size_t n, std::shared_ptr<const BoundarySurface> boundarysurface) const;
+        //get volume at the global position glopos - this volume can itself also be a containervolume
+        const Volume* getVolume(const Alg::Point3D& glopos) const;
         
     private:
+        //BinnedArray of the containing volumes
+        //binned either in z or in r for the ContainerCylinderVolume
         VolumeArray* m_volumes;
     };
 }

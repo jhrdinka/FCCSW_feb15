@@ -17,22 +17,23 @@ namespace Reco {
     class BoundaryCylinderSurface : public BoundarySurface, public CylinderSurface {
     
     public:
-        
+        //constructors from TGeoGeometry for the conversion of the DD4Hep Geometry in the RecoGeoConverterTool
+        //constructor with TGeoNode - transform is set automatically
         BoundaryCylinderSurface(TGeoNode* node, TGeoConeSeg* tube);
+        //constructor to set transform manually
         BoundaryCylinderSurface(TGeoConeSeg* tube, std::shared_ptr<const Alg::Transform3D> transf);
+        //manuel constructor, to set transform and dimensions manuel
         BoundaryCylinderSurface(std::shared_ptr<const Alg::Transform3D> transf, double radius, double halfZ);
+        //copy constructor
+        BoundaryCylinderSurface(const BoundaryCylinderSurface& boundarycylindersurface);
+        //destructor
         ~BoundaryCylinderSurface();
-        
+        //assignment operator
         BoundaryCylinderSurface& operator=(const BoundaryCylinderSurface& boundarycylindersurface);
-        
- //       virtual void setNextVolume(Volume* nextVolume) const override;
- //       virtual void setPreviousVolume(Volume* previousVolume) const override;
- //       virtual void setNextVolumes(VolumeArray* nextVolumes) const override;
- //       virtual void setPreviousVolumes(VolumeArray* previousVolumes) const override;
-//        virtual const Volume* getNextVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const;
-//        virtual const Volume* getPreviousVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const;
-        virtual const CylinderSurface* surfaceRepresentation() const;
-        
+        //get Material on a local position of the surface
+        //for boundarysurface material is constant over the surface
+        virtual const Material* material(Alg::Point2D& locpos) const override;
+        //returns the surfacerepresentation
     };
 }
 

@@ -20,63 +20,41 @@ Layer(sf),
 CylinderSurface(node, tube),
 m_Rmin(tube->GetRmin1()),
 m_Rmax(tube->GetRmax1())
-{
-    //inner Cylinder
- /*   if (m_Rmin>0.) {
-        std::shared_ptr<Reco::CylinderSurface> innerCylinder (new Reco::CylinderSurface(new Alg::Transform3D(transform()),m_Rmin,getHalfZ()));
-        m_boundaries->push_back(innerCylinder);
-    }
-    //outer Cylinder
-    std::shared_ptr<Reco::CylinderSurface> outerCylinder (new Reco::CylinderSurface(new Alg::Transform3D(transform()),m_Rmax,getHalfZ()));
-    m_boundaries->push_back(outerCylinder);*/
-}
+{}
 
 Reco::CylinderLayer::CylinderLayer(std::shared_ptr<const Alg::Transform3D> transf, TGeoConeSeg* tube, Trk::BinnedArray<Surface>* sf) :
 Layer(sf),
 CylinderSurface(tube, transf),
 m_Rmin(tube->GetRmin1()),
 m_Rmax(tube->GetRmax1())
-{
-/*    //inner Cylinder
-    if (m_Rmin>0.) {
-        std::shared_ptr<Reco::CylinderSurface> innerCylinder (new Reco::CylinderSurface(transf,m_Rmin,getHalfZ()));
-        m_boundaries->push_back(innerCylinder);
-    }
-    //outer Cylinder
-    std::shared_ptr<Reco::CylinderSurface> outerCylinder (new Reco::CylinderSurface(transf,m_Rmax,getHalfZ()));
-    m_boundaries->push_back(outerCylinder); */
-}
+{}
 
 Reco::CylinderLayer::CylinderLayer(std::shared_ptr<const Alg::Transform3D> transf, double rmin, double rmax, double halfZ, Trk::BinnedArray<Surface>* sf) :
 Layer(sf),
 CylinderSurface(transf, 0.5*(rmin+rmax), halfZ),
 m_Rmin(rmin),
 m_Rmax(rmax)
-{
-/*    //inner Cylinder
-    if (m_Rmin>0.) {
-        std::shared_ptr<Reco::CylinderSurface> innerCylinder (new Reco::CylinderSurface(transf,m_Rmin,halfZ));
-        m_boundaries->push_back(innerCylinder);
-    }
-    //outer Cylinder
-    std::shared_ptr<Reco::CylinderSurface> outerCylinder (new Reco::CylinderSurface(transf,m_Rmax,halfZ));
-    m_boundaries->push_back(outerCylinder); */
-}
+{}
 
 Reco::CylinderLayer::~CylinderLayer()
 {}
 
 const Reco::Surface* Reco::CylinderLayer::getModule(const Alg::Point3D& glopos) const
 {
-    Alg::Point2D* locpos = new Alg::Point2D();
-    const Alg::Vector3D* mom = new Alg::Vector3D();
-    if (this->globalToLocal(glopos, *mom, *locpos)) return (getModule(*locpos));
+    if (this->onLayer(glopos)) {
+    Alg::Point2D locpos(0.,0.);
+    const Alg::Vector3D mom(0.,0.,0.);
+    if (m_surfaces->object(locpos) && m_surfaces->object(locpos)->globalToLocal(glopos,mom,locpos)) return m_surfaces->object(locpos);
+    }
     return (0);
 }
 
 const Reco::Surface* Reco::CylinderLayer::getModule(const Alg::Point2D& locpos) const
 {
-    return (m_surfaces->object(locpos));
+    Alg::Point3D glopos(0.,0.,0.);
+    const Alg::Vector3D mom(0.,0.,0.);
+    this->localToGlobal(locpos,mom,glopos);
+    return (Reco::CylinderLayer::getModule(glopos));
 }
 
 double Reco::CylinderLayer::getRmin() const
@@ -115,7 +93,7 @@ const Reco::Layer* Reco::CylinderLayer::getPreviousLayer() const
 
 const Reco::Layer* Reco::CylinderLayer::getNextLayer(const Alg::Vector3D&) const
 {
-    return getNextLayer(); //noch ueberlegen wie das gehen soll
+    return getNextLayer(); //noch ueberlegen wie das genau gehen soll eventuell mit punkt
 }
 const Reco::Layer* Reco::CylinderLayer::getPreviousLayer(const Alg::Vector3D&) const
 {
@@ -133,11 +111,6 @@ Reco::Layer::LayerType Reco::CylinderLayer::type() const
     return (Reco::Layer::cylinder); 
 }
 
-/*bool Reco::CylinderLayer::insideLayer(const Alg::Point3D& glopos, double tol) const
-{
-    double radius = sqrt(glopos.X()*glopos.X()+glopos.Y()*glopos.Y());
-    return ((radius < (m_Rmax+tol)) && (radius > (m_Rmin-tol)) && (fabs(glopos.Z()) < (this->getHalfZ()+tol)));
-}*/
 const Reco::CylinderSurface* Reco::CylinderLayer::surfaceRepresentation() const
 {
     return (this);

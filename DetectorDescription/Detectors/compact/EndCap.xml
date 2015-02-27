@@ -60,21 +60,32 @@
         
    <!--     <constant name="EndCapRmin" value="88.8*mm"/> -->
      <!--      <constant name="EndCapRmax" value="149.6*mm"/>-->
-        <constant name="EndCapRmin" value="42.1*mm"/>
-        <constant name="EndCapRmax" value="102.9*mm"/>
         <!--      <constant name="EndCapZ" value="0.125*mm"/> -->
         <constant name="LayerDZ" value="0.7*mm"/>
         <constant name="EndCapZ" value="2.*mm"/>
         <constant name="slice1positionz1" value="0.*mm"/>
         <constant name="slice2positionz1" value="-0.125*mm"/>
         <constant name="positionz2" value="400.5*mm"/>
-        <constant name="endcapcounter1" value="33"/>
+<!--        <constant name="endcapcounter1" value="33"/>
         <constant name="endcapcounter2" value="42"/>
         <constant name="slice1radius" value="72.5*mm"/>
-        <constant name="slice2radius" value="100.5*mm"/>
+        <constant name="slice2radius" value="100.5*mm"/> -->
         <constant name="box2_width" value="11.34*mm"/>
         
         <constant name="zrepeat" value="6"/>
+        
+        <constant name="positionz1_1" value="-420.5*mm"/>
+        <constant name="positionz1_2" value="420.5*mm"/>
+        <constant name="EndCapRmin1" value="42.1*mm"/>
+        <constant name="EndCapRmax1" value="102.9*mm"/>
+        <constant name="pixelcounter1_3" value="32"/>
+        <constant name="slice1radius1" value="72.5*mm"/>
+        <constant name="slice2radius1" value="98.04*mm"/>
+        <constant name="TrdXmin1" value="4.1332*mm"/>
+        <constant name="TrdXmax1" value="10.1022*mm"/>
+        <!--   <constant name="TrdZ" value="91.2*mm"/>-->
+        <constant name="TrdXmin1" value="13.2536*mm"/>
+        <constant name="TrdXmax1" value="*mm"/>
             
             
         </define>
@@ -109,20 +120,22 @@
         </readouts>
         
         <detectors>
-        <detector id="1" name="EndCap1" type="EndCap" readout="TrackerReadout">
-            <dimensions rmin="Tracker_rmin" rmax = "Tracker_rmax" dz="EndCapZ" z ="positionz2"/>
-             <layer id="0" inner_r="EndCapRmin" outer_r="rmax2" dz="LayerDZ" repeat="endcapcounter1">
-                 <module name ="Box0" radius="slice1radius" dz="slice1positionz1" width="box_width" length="box_length" thickness="0.6*mm">
-                     <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp0"/>
-                     <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp1"/>
-                     <module_component width="box_width" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp2"/>
-                 </module>
-                 <module name ="Box1" radius="slice2radius" dz="slice2positionz1" width="box2_width" length="box_length" thickness="0.6*mm">
-                     <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp3"/>
-                     <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp4"/>
-                     <module_component width="box2_width" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp5"/>
-                 </module>
-             </layer>
+            <!--negEndCap1-->
+            <detector id="2" name="EndCap1_1" type="TestTracker3" readout="TrackerReadout">
+                <status id="1"/>
+                <dimensions rmin="Tracker_rmin1" rmax = "Tracker_rmax1" dz="EndCapZ" z ="positionz1_1"/>
+                <layer id="0" inner_r="EndCapRmin1" outer_r="EndCapRmax1" dz="LayerDZ" z="layerpos1" repeat="pixelcounter1_3">
+                    <module name ="Trd0" radius="slice1radius1" dz="slice1positionz1" x1="TrdXmin1" x2="TrdXmax1" length="box_length" thickness="0.6*mm">
+                        <module_component x1="TrdXmin1" x2="TrdXmax1" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp0"/>
+                        <module_component x1="TrdXmin1" x2="TrdXmax1" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp1"/>
+                        <module_component x1="TrdXmin1" x2="TrdXmax1" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp2"/>
+                    </module>
+                    <module name ="Trd1" radius="slice2radius1" dz="slice2positionz1" x1="TrdXmin2"  x2="TrdXmax2" length="box_length" thickness="0.6*mm">
+                        <module_component x1="TrdXmin2"  x2="TrdXmax2" length="box_length" thickness="0.2*mm" z ="-0.2*mm" material="Silicon" sensitive="true" vis="comp3"/>
+                        <module_component x1="TrdXmin2"  x2="TrdXmax2" length="box_length" thickness="0.2*mm" z ="0.*mm" material="Copper" sensitive="false" vis="comp4"/>
+                        <module_component x1="TrdXmin2"  x2="TrdXmax2" length="box_length" thickness="0.2*mm" z ="0.2*mm" material="Tungsten" sensitive="false" vis="comp5"/>
+                    </module>
+                </layer>
          </detector>
 
         </detectors>

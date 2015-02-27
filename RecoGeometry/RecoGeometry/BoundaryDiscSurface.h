@@ -17,24 +17,22 @@ namespace Reco {
     class BoundaryDiscSurface : public BoundarySurface, public DiscSurface {
         
     public:
-        
+        //constructors from TGeoGeometry for the conversion of the DD4Hep Geometry in the RecoGeoConverterTool
+        //constructor with TGeoNode - transform is set automatically
         BoundaryDiscSurface(TGeoNode* node, TGeoConeSeg* tube);
+        //constructor to set transform manually
         BoundaryDiscSurface(TGeoConeSeg* tube, std::shared_ptr<const Alg::Transform3D> transf);
+        //manuel constructor, to set transform and dimensions manuel
         BoundaryDiscSurface(std::shared_ptr<const Alg::Transform3D> transf, double Rmin, double Rmax);
-   //     BoundaryDiscSurface(Volume* nextVolume, Volume* previousVolume);
-   //     BoundaryDiscSurface(VolumeArray* nextVolumes, VolumeArray* previousVolumes);
+        //copy constructor
+        BoundaryDiscSurface(const BoundaryDiscSurface& boundarydiscsurface);
+        //destructor
         ~BoundaryDiscSurface();
-        
+        //assignment operator
         BoundaryDiscSurface& operator=(const BoundaryDiscSurface& boundarydiscsurface);
-        
-//        virtual void setNextVolume(Volume* nextVolume) const override;
-//        virtual void setPreviousVolume(Volume* previousVolume) const override;
-//        virtual void setNextVolumes(VolumeArray* nextVolumes) const override;
-//        virtual void setPreviousVolumes(VolumeArray* previousVolumes) const override;
-//        virtual const Volume* getNextVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const;
-//        virtual const Volume* getPreviousVolume(const Alg::Point3D& glopos, const Alg::Vector3D& dir) const;
-        virtual const DiscSurface* surfaceRepresentation() const;
-    
+        //get Material on a local position of the surface
+        //for a boundarysurface material is constant over the surface
+        virtual const Material* material(Alg::Point2D& locpos) const override;
     };
 }
 #endif //RECO_BOUNDARYDISCSURFACE_H

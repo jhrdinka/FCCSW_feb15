@@ -12,26 +12,28 @@ Reco::BoundarySurface::BoundarySurface() :
 m_nextVolume(0),
 m_previousVolume(0),
 m_nextVolumes(0),
-m_previousVolumes(0)
-{}
-/*
-Reco::BoundarySurface::BoundarySurface(Volume* nextVolume, Volume* previousVolume) :
-m_nextVolume(nextVolume),
-m_previousVolume(previousVolume),
-m_nextVolumes(0),
-m_previousVolumes(0)
+m_previousVolumes(0),
+m_material(0)
 {}
 
-Reco::BoundarySurface::BoundarySurface(VolumeArray* nextVolumes, VolumeArray* previousVolumes) :
+Reco::BoundarySurface::BoundarySurface(const BoundarySurface& boundarysurface) :
 m_nextVolume(0),
 m_previousVolume(0),
-m_nextVolumes(nextVolumes),
-m_previousVolumes(previousVolumes)
-{}
-*/
+m_nextVolumes(0),
+m_previousVolumes(0),
+m_material(0)
+{
+    m_nextVolume     = boundarysurface.m_nextVolume;
+    m_previousVolume = boundarysurface.m_previousVolume;
+    m_nextVolumes    = boundarysurface.getNextVolumes();
+    m_previousVolumes= boundarysurface.getPreviousVolumes();
+    m_material       = boundarysurface.getMaterial();
+}
+
 Reco::BoundarySurface::~BoundarySurface()
 {
     delete m_nextVolumes;
+    delete m_material;
 }
 
 Reco::BoundarySurface& Reco::BoundarySurface::operator=(const BoundarySurface& boundarysurface)
@@ -40,8 +42,9 @@ Reco::BoundarySurface& Reco::BoundarySurface::operator=(const BoundarySurface& b
     {
         m_nextVolume     = boundarysurface.m_nextVolume;
         m_previousVolume = boundarysurface.m_previousVolume;
-        delete m_nextVolumes;    m_nextVolumes = 0;
-        delete m_previousVolumes; m_previousVolumes = 0;
+        m_nextVolumes    = new VolumeArray(*boundarysurface.m_nextVolumes);
+        m_previousVolumes= new VolumeArray(*boundarysurface.m_previousVolumes);
+        m_material       = new Material(*boundarysurface.getMaterial());
     }
     return (*this);
     
@@ -86,5 +89,20 @@ const Reco::BoundarySurface::VolumeArray* Reco::BoundarySurface::getPreviousVolu
 {
     return (m_previousVolumes);
 }
+
+void Reco::BoundarySurface::setMaterial(Reco::Material* material)
+{
+    m_material = material;
+}
+
+Reco::Material* Reco::BoundarySurface::getMaterial() const
+{
+    return (m_material);
+}
+
+
+
+
+
 
 

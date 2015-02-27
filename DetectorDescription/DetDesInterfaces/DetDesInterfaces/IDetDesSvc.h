@@ -6,19 +6,16 @@
 //
 //
 
-#ifndef _IDetDesSvc_h
-#define _IDetDesSvc_h
+#ifndef IDETDESSVC_H
+#define IDETDESSVC_H
 
 
 #include "GaudiKernel/IService.h"
-#include "DD4hep/VolumeManager.h"
-class TGeoManager;
-
-
-//muss ich GAUDI-API dazuschreiben?
+//DD4Hep
+#include "DD4hep/LCDD.h"
 
 class GAUDI_API IDetDesSvc: virtual public IService {
-
+    
 public:
     /// InterfaceID
     DeclareInterfaceID(IDetDesSvc,1,0);
@@ -27,16 +24,12 @@ public:
     
     virtual StatusCode destroyDetector () = 0;
     
+    virtual DD4hep::Geometry::LCDD* lcdd () = 0;
+    
     virtual ~IDetDesSvc() {}
-    
-    virtual TGeoManager& GetTGeo() = 0;
-    
-    virtual DD4hep::Geometry::Volume getWorldVolume() = 0;
-    
-    virtual DD4hep::Geometry::DetElement getDetWorld() = 0;
     
 };
 
 
 
-#endif
+#endif //IDETDESSVC_H

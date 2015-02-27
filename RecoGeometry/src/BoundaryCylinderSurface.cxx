@@ -23,6 +23,11 @@ BoundarySurface(),
 CylinderSurface(transf,radius,halfZ)
 {}
 
+Reco::BoundaryCylinderSurface::BoundaryCylinderSurface(const Reco::BoundaryCylinderSurface& boundarycylindersurface) :
+BoundarySurface(boundarycylindersurface),
+CylinderSurface(boundarycylindersurface)
+{}
+
 Reco::BoundaryCylinderSurface::~BoundaryCylinderSurface()
 {}
 
@@ -34,28 +39,8 @@ Reco::BoundaryCylinderSurface& Reco::BoundaryCylinderSurface::operator=(const Bo
     }
     return (*this);
 }
-/*
-void Reco::BoundaryCylinderSurface::setNextVolume(Volume* nextVolume) const
-{
-    Reco::BoundarySurface::setNextVolume(nextVolume);
-}
 
-void Reco::BoundaryCylinderSurface::setPreviousVolume(Volume* previousVolume) const
+const Reco::Material* Reco::BoundaryCylinderSurface::material(Alg::Point2D&) const
 {
-    Reco::BoundarySurface::setPreviousVolume(previousVolume);
+    return(BoundarySurface::getMaterial());
 }
-
-void Reco::BoundaryCylinderSurface::setNextVolumes(VolumeArray* nextVolumes) const
-{
-    Reco::BoundarySurface::setNextVolumes(nextVolumes);
-}
-
-void Reco::BoundaryCylinderSurface::setPreviousVolumes(VolumeArray* previousVolumes) const
-{
-    Reco::BoundarySurface::setPreviousVolumes(previousVolumes);
-}
-*/
-const Reco::CylinderSurface* Reco::BoundaryCylinderSurface::surfaceRepresentation() const
-{
-    return (this);
-} 

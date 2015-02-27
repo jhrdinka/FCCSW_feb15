@@ -6,75 +6,50 @@
 //
 //
 
-#ifndef _DD4HepDetDesSvc_h
-#define _DD4HepDetDesSvc_h
+#ifndef DD4HEPDETDESSVC_H
+#define DD4HEPDETDESSVC_H
 
-#include "DD4hep/LCDD.h"
-#include "GaudiKernel/Service.h"
+//Interface
 #include "DetDesInterfaces/IDetDesSvc.h"
+//Gaudi
+#include "GaudiKernel/Service.h"
+#include "GaudiKernel/MsgStream.h"
+#include "GaudiKernel/IIncidentSvc.h"
 #include "GaudiKernel/IIncidentListener.h"
 #include "GaudiKernel/ToolHandle.h"
-#include "SimulationInterfaces/IGeoConverterTool.h"
-#include "SimFastTools/RecoGeoConverterTool.h"
-#include "SimG4Tools/Geant4GeoConverterTool.h"
-
-#include <string>
-
-//forward declaration
-//class IGeoConverterTool;
-class TGeoManager;
-//class VolumeManager;
-class Handle;
-
-class DetElement;
-
-typedef DD4hep::Geometry::VolumeManager VolumeManager;
-
+#include "GaudiKernel/DataObjectHandle.h"
+//DD4Hep
+#include "DD4hep/LCDD.h"
 
 class DD4HepDetDesSvc: public extends2<Service, IDetDesSvc, IIncidentListener> {
 
  public:
-    //standard constructor
+    //constructor - loads the xml-file and declares the converter tools specified in the job options
     DD4HepDetDesSvc (const std::string& name, ISvcLocator* svc);
-    
-    //destructor
+    //destructor - calls destroyDetector()
     virtual ~DD4HepDetDesSvc ();
-    
+    //initialize - retrieves the DD4Hep Geometry, calls buildDetector(), fires an Incident that the DD4hep geometry is build and retrieves the converter tools
     virtual StatusCode initialize ();
+    //finalize
     virtual StatusCode finalize ();
-    
+    //inform that new incident has occurred
     void handle(const Incident&);
-    
+    //loads the geometry from the xml-file, invokes detector building in DD4Hep and calls the converter tools
     virtual StatusCode buildDetector ();
+    //destroys the DD4Hep geometry
     virtual StatusCode destroyDetector ();
-    
-    //returns TGeoManager of DD4hep Geometry
-    virtual TGeoManager& GetTGeo();
-    //returns DD4hep GeoManager
-   // virtual DD4hep::Geometry::VolumeManager GeoManager();
-    
-    virtual DD4hep::Geometry::Volume getWorldVolume();
-    
-    virtual DD4hep::Geometry::DetElement getDetWorld();
-    
-    //virtual DD4hep::Geometry::VolumeManager GeoManager();
-    
-    //virtual DD4hep::Geometry::LCDD::HandleMap& GetSensitiveDet();
-
+    //returns pointer to the interface to the DD4Hep geometry
+    virtual DD4hep::Geometry::LCDD* lcdd() override;
  
 protected:
-    //Detector Description Object
- //   ToolHandleArray<IGeoConverterTool>   m_geoConverters;
-    
-    ToolHandle <IGeoConverterTool> m_recoConverter;
-    ToolHandle <IGeoConverterTool> m_g4Converter;
-    
-    
+
     DD4hep::Geometry::LCDD* m_lcdd;
+    //xml-file with the detector description
     std::string   m_xmlFileName;
+    //output
     MsgStream m_log;
 
 };
 
 
-#endif
+#endif //DD4HEPDETDESSVC_H
