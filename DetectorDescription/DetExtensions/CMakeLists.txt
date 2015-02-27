@@ -1,8 +1,8 @@
 ################################################################################
-# Package: DetectorExtensions
+# Package: DetExtensions
 ################################################################################
-gaudi_subdir(DetectorExtensions v1r0)
+gaudi_subdir(DetExtensions v1r0)
 
-gaudi_install_headers(DetectorExtensions)
+gaudi_install_headers(DetExtensions)
 
 

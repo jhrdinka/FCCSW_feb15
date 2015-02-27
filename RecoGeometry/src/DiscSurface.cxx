@@ -55,6 +55,12 @@ Reco::Surface(materialmap, transf)
     //vl noch ueberpruefung mit z machen??
 }
 
+Reco::DiscSurface::DiscSurface(const Reco::DiscSurface& discsurface) :
+Reco::Surface(discsurface),
+m_Rmin(discsurface.m_Rmin),
+m_Rmax(discsurface.m_Rmax)
+{}
+
 Reco::DiscSurface::~DiscSurface()
 {}
 
@@ -86,6 +92,17 @@ const Alg::Vector3D& Reco::DiscSurface::normal() const
 const Alg::Vector3D* Reco::DiscSurface::normal(const Alg::Point2D&) const
 {
     return (new Alg::Vector3D(normal()));
+}
+
+const Reco::Material* Reco::DiscSurface::material(Alg::Point2D& locpos) const
+{
+    if (materialmap()->binutility()) {
+        int binx = materialmap()->binutility()->bin(locpos,0);
+        int biny = materialmap()->binutility()->bin(locpos,1);
+        std::pair<int,int> bins = std::make_pair(binx,biny);
+        return (materialmap()->material(bins));
+    }
+    return 0;
 }
 
 bool Reco::DiscSurface::isInside(const Alg::Point2D& locpos, double tol1, double tol2) const

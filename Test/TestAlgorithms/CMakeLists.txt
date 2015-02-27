@@ -17,11 +17,13 @@ find_package(ROOT COMPONENTS MathCore GenVector Geom)
 
 find_package(DD4hep)
 
+find_package(Geant4)
+
 
 gaudi_add_module(TestAlgorithms
 		 src/*.cxx
-		 INCLUDE_DIRS Algebra ROOT  DetDesInterfaces DD4hep RecoGeometry GaudiKernel
-                 LINK_LIBRARIES GaudiAlgLib DataObjects ROOT GaudiKernel DD4hep RecoGeometry)
+		 INCLUDE_DIRS Algebra ROOT  DetDesInterfaces DD4hep RecoGeometry GaudiKernel Geant4
+                 LINK_LIBRARIES GaudiAlgLib DataObjects ROOT GaudiKernel DD4hep RecoGeometry Geant4)
 
 	
 

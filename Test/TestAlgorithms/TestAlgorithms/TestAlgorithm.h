@@ -2,7 +2,6 @@
 #define _TESTALGORITHM_H_
 
 #include "GaudiAlg/GaudiAlgorithm.h"
-#include "DetDesInterfaces/IDetDesSvc.h"
 
 class TestAlgorithm: public GaudiAlgorithm {
   friend class AlgFactory<TestAlgorithm> ;
@@ -19,7 +18,6 @@ public:
 
 private:
     
-    IDetDesSvc* m_detsvc; //Detector Description Service
 };
 
 #endif

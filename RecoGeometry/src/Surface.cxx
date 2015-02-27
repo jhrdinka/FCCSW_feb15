@@ -43,15 +43,7 @@ m_materialmap(0)
                                        rotation[3], rotation[4], rotation[5], translation[1],
                                        rotation[6], rotation[7], rotation[8], translation[2]));
 }
-/*
-Reco::Surface::Surface(TGeoNode* node, Alg::Transform3D* transf) :
-m_center    (0),
-m_normal    (0),
-m_transform (transf),
-m_node      (node),
-m_materialmap(0)
-{}
-*/
+
 //constructor to set material
 Reco::Surface::Surface(TGeoNode* node, MaterialMap* materialmap) :
 m_center(0),
@@ -76,6 +68,17 @@ m_transform (transf),
 m_node(0),
 m_materialmap(materialmap)
 {}
+
+Reco::Surface::Surface(const Reco::Surface& surface) :
+m_center    (0),
+m_normal    (0),
+m_transform (0),
+m_node      (0),
+m_materialmap  (0){
+
+    m_transform  = std::make_shared<const Alg::Transform3D>(surface.transform());
+    m_materialmap= new Reco::MaterialMap(*materialmap());
+}
 
 Reco::Surface::~Surface()
 {
@@ -128,14 +131,10 @@ const Alg::Vector3D* Reco::Surface::normal(const Alg::Point2D&) const
     return (new Alg::Vector3D(normal()));
 }
 
-const Reco::MaterialMap& Reco::Surface::materialmap() const
+const Reco::MaterialMap* Reco::Surface::materialmap() const
 {
-    return (*m_materialmap);
+    return (m_materialmap);
 }
 
-const Reco::Material& Reco::Surface::material(Alg::Point2D& locpos) const
-{
-    return (m_materialmap->material(locpos));
-}
 
 

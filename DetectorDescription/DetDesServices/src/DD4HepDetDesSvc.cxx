@@ -7,12 +7,6 @@
 //
 
 #include "DetDesServices/DD4HepDetDesSvc.h"
-#include "GaudiKernel/MsgStream.h"
-#include "GaudiKernel/IIncidentSvc.h"
-#include "GaudiKernel/DataObjectHandle.h"
-
-
-//#include "DDG4/Geant4Kernel.h"
 
 using namespace Gaudi;
 
@@ -20,20 +14,13 @@ DECLARE_COMPONENT(DD4HepDetDesSvc)
 
 DD4HepDetDesSvc::DD4HepDetDesSvc(const std::string& name, ISvcLocator* svc)
 : base_class(name, svc),
-  m_recoConverter(),
-  m_g4Converter(),
   m_lcdd(0),
-  m_xmlFileName("file:DetectorDescription/Detectors/compact/test_IronCylinder.xml"),
+  m_xmlFileName("file:DetectorDescription/Detectors/compact/TestTracker.xml"), //over joboptions
   m_log(msgSvc(), name)
-{
- //   declareProperty("DD4HepXMLFile", m_xmlFileName);
-  declareProperty("RecoConverterTool", m_recoConverter);
-  declareProperty("G4ConverterTool",m_g4Converter);
-    declarePublicTool(m_recoConverter, "RecoGeoConverterTool/RecoGeoConverterTool");
-    declarePublicTool(m_g4Converter, "Geant4GeoConverterTool/Geant4GeoConverterTool");
-}
+{}
 
-DD4HepDetDesSvc::~DD4HepDetDesSvc() {
+DD4HepDetDesSvc::~DD4HepDetDesSvc()
+{
     
     if (destroyDetector().isFailure())
         m_log << MSG::WARNING << "Could not call destroyDetector() successfully." << endmsg;
@@ -42,8 +29,8 @@ DD4HepDetDesSvc::~DD4HepDetDesSvc() {
 }
 
 StatusCode
-DD4HepDetDesSvc::initialize () {
-
+DD4HepDetDesSvc::initialize ()
+{
     // we retrieve the the static instance of the DD4HEP::Geometry
     m_lcdd = &(DD4hep::Geometry::LCDD::getInstance());
     m_lcdd->addExtension<IDetDesSvc>(this);
@@ -59,36 +46,27 @@ DD4HepDetDesSvc::initialize () {
     if (sc.isSuccess() ) {
         incidentsvc->fireIncident(detinc);
     }
-    
-    if(m_recoConverter.retrieve().isFailure())
-       m_log << MSG::WARNING << "Retrieving RecoConverter failed." << endmsg;
-    if (m_g4Converter.retrieve().isFailure())
-       m_log << MSG::WARNING << "Retrieving G4Converter failed." << endmsg;
-        
-//    for (auto& geoConv : m_geoConverters) {
-//         sc = geoConv->retrieve();
- //   }
-//   if (sc.isFailure()) {
-//         m_log << MSG::WARNING << "Retrieving converters failed." << endmsg;
-//    }
 
     return StatusCode::SUCCESS;
 }
 
 StatusCode
-DD4HepDetDesSvc::finalize () {
+DD4HepDetDesSvc::finalize ()
+{
     
     return StatusCode::SUCCESS;
 }
 
 
-void DD4HepDetDesSvc::handle(const Incident& inc) {
+void DD4HepDetDesSvc::handle(const Incident& inc)
+{
     m_log << MSG::INFO << "Handling incident type'" << inc.type() << "'" << endmsg;
     m_log << MSG::INFO << "Incident source '" << inc.source() << "'" << endmsg;
 }
 
 StatusCode
-DD4HepDetDesSvc::buildDetector () {
+DD4HepDetDesSvc::buildDetector ()
+{
    m_log << MSG::INFO << "buildDetector() called." << endmsg;
     
     //load geometry
@@ -96,48 +74,22 @@ DD4HepDetDesSvc::buildDetector () {
    char* arg = (char*) m_xmlFileName.c_str();
    m_lcdd->apply("DD4hepXMLLoader", 1, &arg);
    
-   // now loop over all converters and convert the lcdd into the appropriate geometries
-   // for (auto& geoConv : m_geoConverters)
-   //     geoConv->convert(m_lcdd);
-    
- //   m_recoConverter->convert(m_lcdd);
-    m_g4Converter->convert(m_lcdd);
     m_log << MSG::INFO << "AFTER CONVERT" << endmsg;
     
     
   return StatusCode::SUCCESS;
 }
 
-
-
 StatusCode
-DD4HepDetDesSvc::destroyDetector () {
-
+DD4HepDetDesSvc::destroyDetector ()
+{
     //m_lcdd->removeExtension <IDetDesSvc> (false);
     m_lcdd->destroyInstance();
     return StatusCode::SUCCESS;
 }
 
-TGeoManager& DD4HepDetDesSvc::GetTGeo(){
-    return (m_lcdd->manager());
-}
-
-DD4hep::Geometry::Volume DD4HepDetDesSvc::getWorldVolume()
+DD4hep::Geometry::LCDD* DD4HepDetDesSvc::lcdd()
 {
-    return (m_lcdd->worldVolume());
+    return (m_lcdd);
 }
 
-DD4hep::Geometry::DetElement DD4HepDetDesSvc::getDetWorld()
-{
-    return (m_lcdd->world());
-}
-
-
-/*DD4hep::Geometry::VolumeManager DD4HepDetDesSvc::GeoManager(){
-    return (m_lcdd->volumeManager);
-}*/
-
-
-//HandleMap& DD4HepDetDesSvc::GetSensitiveDet(){
-//    return (m_lcdd->sensitiveDetectors());
-//}

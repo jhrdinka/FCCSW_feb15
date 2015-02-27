@@ -18,6 +18,7 @@ namespace Reco {
         
     public:
         
+        //Type for binning the Volumes in Z with the BinUtility
         enum binZType {
             nEnd      = 0,
             nBarrel   = 1,
@@ -25,19 +26,27 @@ namespace Reco {
             pEnd      = 3,
             zLength   = 4
         };
-        
+        //Type for binning the Volumes in R with the BinUtility
         enum binRType {
             inner   = 0,
             middle  = 1,
             outer   = 2,
             rLength = 3
         };
-        
+        //constructor with a BinnedArray of the containing volumes, the transformation matrix and the dimensions of the volume
         ContainerCylinderVolume(VolumeArray* volumes, std::shared_ptr<const Alg::Transform3D> transf, double Rmin, double Rmax, double halfZ);
+        //constructs volume from TGeoNode(transformation matrix) and TGeoConeSeg(dimensions) and a BinnedArray of the containing volumes
         ContainerCylinderVolume(VolumeArray* volumes, TGeoNode* node, TGeoConeSeg* tube);
-        virtual bool isInside(const Alg::Point3D& glopos, double tol=0.) const;
+        //copyconstructor
+        ContainerCylinderVolume(const ContainerCylinderVolume& containercylindervolume);
+        //destructor
         ~ContainerCylinderVolume();
-    
+        //clone Method
+        virtual ContainerCylinderVolume* clone() const override;
+        //checks if global position glopos is inside the bounds of the volume with a tolerance tol
+        virtual bool isInside(const Alg::Point3D& glopos, double tol=0.) const;
+        //checks if global position glopos is inside the bounds of the volume with a tolerance tol
+        virtual bool setBoundarySurface(size_t n, std::shared_ptr<const BoundarySurface> boundarysurface) const;
     };
 }
 
