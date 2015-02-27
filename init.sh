@@ -1,10 +1,18 @@
 #!/bin/sh -u
 
+<<<<<<< HEAD
 if [[ "x$GAUDI" == "x" ]]; then
 echo "Need to set the GAUDI environment variable to the path of the Gaudi software directory (contains GaudiKernel/)."
 return 1
 else
 echo "Gaudi   :    $GAUDI"
+=======
+if [[ "x$GAUDI" == "x" ]]; then 
+    echo "Need to set the GAUDI environment variable to the path of the Gaudi software directory (contains GaudiKernel/)."
+    return 1
+else 
+    echo "Gaudi   :    $GAUDI"
+>>>>>>> origin
 fi
 if [[ "x$FCCBASE" == "x" ]]; then
 echo "Need to set the FCCBASE environment variable to root path of the software (contains both Gaudi and the FCC software)."
@@ -26,4 +34,8 @@ export PATH=/afs/cern.ch/lhcb/software/releases/LBSCRIPTS/LBSCRIPTS_v8r0/Install
 #export PATH=/afs/cern.ch/sw/lcg/contrib/ninja/1.4.0/x86_64-slc6:$PATH
 
 # set up Pythia8 Index.xml
+<<<<<<< HEAD
 export PYTHIA8_XML=/afs/cern.ch/sw/lcg/releases/LCG_68/MCGenerators/pythia8/186/x86_64-slc6-gcc48-opt/xmldoc
+=======
+export PYTHIA8_XML=/afs/cern.ch/sw/lcg/releases/LCG_68/MCGenerators/pythia8/186/x86_64-slc6-gcc48-opt/xmldoc
+>>>>>>> origin
